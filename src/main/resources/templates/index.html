@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>VIAPI</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h2>VIAPI 视觉智能识别</h2>
+
+            <div class="col-md-12 mx-auto">
+                <h4>身份证识别</h4>
+                <div class="col-sm-12">
+                    <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                </div>
+
+                <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <input id='location' class="form-control" onclick="$('#i-face').click();">
+                            <label class="input-group-btn">
+                                <input type="button" id="i-check" value="上传人像面" class="btn btn-primary" onclick="$('#i-face').click();">
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" name="face" id='i-face'  accept=".jpg, .png, .jpeg" onchange="$('#location').val($('#i-face').val());" style="display: none">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <input id='location1' class="form-control" onclick="$('#i-back').click();">
+                            <label class="input-group-btn">
+                                <input type="button" id="i-check-1" value="上传国徽面" class="btn btn-primary" onclick="$('#i-back').click();">
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" name="back" id='i-back'  accept=".jpg, .png, .jpeg" onchange="$('#location1').val($('#i-back').val());" style="display: none">
+                    <input type="text" name="type"  value="RecognizeIdentityCard" style="display: none">
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-primary">识别身份证</button>
+                    </div>
+                </form>
+
+                <div class="row" >
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4">
+                            <img style="width: 100%;" th:src="${faceImage}" th:if="${faceImage ne null}" class="img-fluid" alt=""/>
+                        </div>
+                        <div class="col-sm-4">
+                            <img style="width: 100%;" th:src="${backImage}" th:if="${backImage ne null}" class="img-fluid" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4">
+                            <p th:if="${faceResult ne null}"><span>姓名：</span><span th:text="${faceResult.name}"></span></p>
+                            <p th:if="${faceResult ne null}"><span>性别：</span><span th:text="${faceResult.gender}"></span></p>
+                            <p th:if="${faceResult ne null}"><span>民族：</span><span th:text="${faceResult.nationality}"></span></p>
+                            <p th:if="${faceResult ne null}"><span>出生日期：</span><span th:text="${faceResult.birthDate}"></span></p>
+                            <p th:if="${faceResult ne null}"><span>住址：</span><span th:text="${faceResult.address}"></span></p>
+                            <p th:if="${faceResult ne null}"><span>身份证号码：</span><span th:text="${faceResult.IDNumber}"></span></p>
+                        </div>
+                        <div class="col-sm-4">
+                            <p th:if="${backResult ne null}"><span>签发机关：</span><span th:text="${backResult.issue}"></span></p>
+                            <p th:if="${backResult ne null}"><span>有效日期：</span><span th:text="${backResult.startDate}"></span>~<span th:text="${backResult.endDate}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 mx-auto">
+                <h4>名片识别</h4>
+                <div class="col-sm-12">
+                    <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                </div>
+
+                <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+                    <div class="col-sm-4">
+                        <div class="input-group" style="margin-top: 10px;">
+                            <input id='location2' class="form-control" onclick="$('#i-face2').click();">
+                            <label class="input-group-btn">
+                                <input type="button" id="i-check2" value="上传名片" class="btn btn-primary" onclick="$('#i-face2').click();">
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" name="face" id='i-face2'  accept=".jpg, .png, .jpeg" onchange="$('#location2').val($('#i-face2').val());" style="display: none">
+                    <input type="text" name="type"  value="RecognizeBusinessCard" style="display: none">
+                    <div class="col-sm-4" style="margin-top: 10px;">
+                        <button type="submit" class="btn btn-primary">识别名片</button>
+                    </div>
+                </form>
+
+                <div class="row" >
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4" style="margin-top: 10px;">
+                            <img style="width: 100%;" th:src="${bussImages}" th:if="${bussImages ne null}" class="img-fluid" alt=""/>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4" style="margin-top: 10px;">
+                            <p th:if="${bussResults ne null}"><span>地址：</span><span th:text="${bussResults.addresses}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>手机号码：</span><span th:text="${bussResults.cellPhoneNumbers}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>公司名称：</span><span th:text="${bussResults.companies}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>邮箱地址：</span><span th:text="${bussResults.emails}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>姓名：</span><span th:text="${bussResults.name}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>座机号码：</span><span th:text="${bussResults.officePhoneNumbers}"></span></p>
+                            <p th:if="${bussResults ne null}"><span>职位名称：</span><span th:text="${bussResults.titles}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mx-auto">
+                <h4>火车票识别</h4>
+                <div class="col-sm-12">
+                    <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+                </div>
+
+                <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+                    <div class="col-sm-4">
+                        <div class="input-group">
+                            <input id='location3' class="form-control" onclick="$('#i-face3').click();">
+                            <label class="input-group-btn">
+                                <input type="button" id="i-check3" value="上传火车票" class="btn btn-primary" onclick="$('#i-face3').click();">
+                            </label>
+                        </div>
+                    </div>
+                    <input type="file" name="face" id='i-face3'  accept=".jpg, .png, .jpeg" onchange="$('#location3').val($('#i-face3').val());" style="display: none">
+                    <input type="text" name="type"  value="RecognizeTrainTicket" style="display: none">
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-primary">识别火车票</button>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4" style="margin-top: 10px;">
+                            <img style="width: 100%;" th:src="${ticketImages}" th:if="${ticketImages ne null}" class="img-fluid" alt=""/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <div class="col-sm-4" style="margin-top: 10px;">
+                            <p th:if="${ticketResults ne null}"><span>乘车日期时间：</span><span th:text="${ticketResults.date}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>始发站点：</span><span th:text="${ticketResults.departureStation}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>目的站点：</span><span th:text="${ticketResults.destination}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>座位席别：</span><span th:text="${ticketResults.level}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>乘车人姓名：</span><span th:text="${ticketResults.name}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>车次号：</span><span th:text="${ticketResults.number}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>票价：</span><span th:text="${ticketResults.price}"></span></p>
+                            <p th:if="${ticketResults ne null}"><span>座位车厢及座次号：</span><span th:text="${ticketResults.seat}"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</body>
+</html>
